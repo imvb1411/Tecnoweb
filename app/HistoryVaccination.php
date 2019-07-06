@@ -1,0 +1,23 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class HistoryVaccination extends Model
+{
+    protected $table='clinic_history_vaccinations';
+    protected $primaryKey='idhistoryvaccionation';
+    protected $fillable=[
+        'dosisnumber',
+        'status'
+    ];
+
+    public function history(){
+        return $this->belongsTo('App\History','historyid','idhistory');
+    }
+
+    public function vaccination(){
+        return $this->belongsTo('App\Vaccination','vaccinationid','idvaccination');
+    }
+}
