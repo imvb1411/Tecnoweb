@@ -2,7 +2,25 @@
 @section('title', 'Historiales')
     @section('header-title','Listado de historiales')
 @section('header-content')
-    <button class="btn btn-primary btn-lg" id="new" data-toggle="modal" data-target="#edit">Nuevo</button>
+    <div class="row">
+        <div class="col-3">
+            <button class="btn btn-primary btn-lg" id="new" data-toggle="modal" data-target="#edit">Nuevo</button>
+        </div>
+        <div class="col-9">
+            <div class="col-md-3 col-sm-6 col-12 float-sm-right">
+                <div class="info-box bg-success">
+                    <span class="info-box-icon"><i class="far fa-flag"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Visitas</span>
+                        <span class="info-box-number">{{$view->views}}</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('content')
     <div class="form-group">
@@ -23,14 +41,16 @@
                 <td>{{$history->pet->owner->firstname}} {{$history->pet->owner->lastname}}</td>
                 <td >
                     <a class="btn btn-success"
-                       data-idhistory="{{$history->idhistory}}"
-                       data-petname="{{$history->pet->petname}}"
+                       data-idhc="{{$history->idhistory}}"
+                       data-petnc="{{$history->pet->petname}}"
+                       data-consultations="{{$history->consultations}}"
                        data-toggle="modal" id="btneditH" data-target="#history">
                         H. Clinico
                     </a>
                     <a class="btn btn-warning"
-                       data-idhistory="{{$history->idhistory}}"
-                       data-petname="{{$history->pet->petname}}"
+                       data-idH="{{$history->idhistory}}"
+                       data-petN="{{$history->pet->petname}}"
+                       data-vaccinations="{{$history->vaccinations}}"
                        data-toggle="modal" id="btneditV" data-target="#historyVaccination">
                         H. Vacunas
                     </a>
@@ -40,7 +60,7 @@
                        data-petname="{{$history->pet->petname}}"
                        data-birthdate="{{$history->pet->birthdate}}"
                        data-color="{{$history->pet->color}}"
-                       data-toggle="modal" id="btnedit" data-target="#edit">
+                       data-toggle="modal" id="btnedit" data-target="#edit" onclick="historyEditClick();">
                         Editar
                     </a>
                 </td>
@@ -70,11 +90,11 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-3">
-                                        <input type="radio" class="form-check-input" id="rnewOwner">
+                                        <input type="radio" class="form-check-input" id="rnewOwner" name="newOwner">
                                         <label for="rnewOwner">Nuevo cliente</label>
                                     </div>
                                     <div class="col-3">
-                                        <input type="radio" class="form-check-input" id="rOwner">
+                                        <input type="radio" class="form-check-input" id="rOwner" name="ownerExist">
                                         <label for="rOwner">Cliente existente</label>
                                     </div>
                                 </div>
@@ -150,167 +170,17 @@
         {!! Form::close() !!}
     </div>
 
-    <div id="historyVaccination" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="htitle">Historial de vacunas</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="idhistory" id="idhistory" class="form-control">
-                    <a data-toggle="modal" class="btn btn-info" data-target="#addVaccination">+Vacuna</a>
-                    <br>
-                    <br>
-                        <table id="vaccinationTable" class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>VACUNA</th>
-                                    <th>DOSIS</th>
-                                    <th>FECHA</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($hvaccinations as $h)
-                                    <tr>
-                                        <td>{{$h->vaccination->vaccinationname}}</td>
-                                        <td>{{$h->dosisnumber}}</td>
-                                        <td>{{$h->createdat}}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+    @include('clinic.histories.modalHistoryVaccination')
+    @include('clinic.histories.modalHistoryConsultation')
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="btn">Editar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="addVaccination" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="htitle">Editar vacuna</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="idhistory" id="idhistory" class="form-control">
-                    <div class="row">
-                        <div class="col-6">
-                            <label for="vaccinationid">Vacuna</label>
-                            <select name="vaccinationid" id="vaccinationid" class="form-control">
-                            @foreach($vaccinations as $vaccination)
-                                    <option value="{{$vaccination->idvaccination}}">{{$vaccination->vaccinationname}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <label for="dosisnumber">#Dosis</label>
-                            <input type="number" name="dosisnumber" id="dosisnumber" class="form-control" placeholder="Ingrese el # de dosis">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="btn">Editar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="history" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="htitle">Historial clinico</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="idhistory" id="idhistory" class="form-control">
-                    <a data-toggle="modal" class="btn btn-info" data-target="#addConsultation">+Consulta</a>
-                    <br>
-                    <br>
-                    <table id="historyTable" class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>FECHA</th>
-                            <th>DETALLE</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($hvaccinations as $h)
-                            <tr>
-                                <td>{{$h->vaccination->vaccinationname}}</td>
-                                <td>{{$h->dosisnumber}}</td>
-                                <td>{{$h->createdat}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="btn">Editar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="addConsultation" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="htitle">Editar consultas</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="idhistory" id="idhistory" class="form-control">
-                    <div class="row">
-                        <div class="col-6">
-                            <label for="vaccinationid">Vacuna</label>
-                            <select name="vaccinationid" id="vaccinationid" class="form-control">
-                                @foreach($vaccinations as $vaccination)
-                                    <option value="{{$vaccination->idvaccination}}">{{$vaccination->vaccinationname}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <label for="dosisnumber">#Dosis</label>
-                            <input type="number" name="dosisnumber" id="dosisnumber" class="form-control" placeholder="Ingrese el # de dosis">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="btn">Editar</button>
-                </div>
-            </div>
-        </div>
-    </div>
     @push('scripts')
-        {{--<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>--}}
-        {{--{!! JsValidator::formRequest('App\Http\Requests\UserRequest', '#userForm'); !!}--}}
         <script>
             $(function () {
                 $("#userTable").DataTable();
                 $("#vaccinationTable").DataTable();
-
             });
+
             var inputs=document.querySelectorAll('input:not([type="submit"])');
-            var action=1;
             var flag=true;
             var submit = document.getElementById('btn');
             for (var i=0;i<inputs.length;i++){
@@ -346,6 +216,7 @@
                     submit.style.display='inline';
                 }
             }
+// -------------------------------------NUEVO HISTORIAL------------------------------------------------------------------------
             document.getElementById('rOwner').checked=true;
             document.getElementById('newOwner').style.display='none';
             document.getElementById('owner').style.display='inline';
@@ -363,8 +234,10 @@
                 document.getElementById('newOwner').style.display='none';
                 document.getElementById('owner').style.display='inline';
             });
-
-            var _iMethod='';
+// -------------------------------------------------------------------------------------------------------------------------------
+            var _iMethod=null;
+            var action=1;
+// ---------------------------------------HISTORIAL CREACION-----------------------------------------------------------------------
             $('#new').click(function () {
                 action=1;
                 var form= document.getElementById('historyForm');
@@ -380,24 +253,24 @@
                 }
                 document.getElementById('htitle').innerText='Nuevo historial';
                 document.getElementById('btn').innerText='Guardar'
-
             });
-            $(document).ready(function () {
-                $(".btn").click(function () {
+
+
+
+            function historyEditClick(){
                 var form= document.getElementById('historyForm');
                 action=2;
                 form.action='{{route('histories.update',0)}}';
                 form.method='post';
-                //if(_iMethod.toString().length>0){
-                _iMethod.value='PUT';
-                //}
+                if(_iMethod!=null){
+                    _iMethod.value='PUT';
+                }
                 document.getElementById('htitle').innerText='Editar historial';
-                document.getElementById('btn').innerText='Editar'
-                });
-            });
+                document.getElementById('btn').innerText='Editar';
+            }
+
             $('#edit').on('show.bs.modal',function(event){
-                 if((_iMethod.value==='PUT' || _iMethod.toString().length===0) && action===2) {
-                     console.log(_iMethod);
+                 if(action===2) {
                     var button = $(event.relatedTarget);
                     var idhistory = button.data('idhistory');
                     var ownerid=button.data('ownerid');
@@ -417,7 +290,132 @@
                      modal.find('.modal-body #birthdate').val('');
                      modal.find('.modal-body #color').val('');
                  }
-            })
+            });
+//---------------------------------------------------HISTORIAL VACUNAS------------------------------------------------------------------------------------
+            var actionV=1;
+            $('#newVaccination').click(function () {
+                actionV=1;
+                var form= document.getElementById('historyVaccinationForm');
+                form.action='{{route('historiesVaccination.addVaccination')}}';
+                form.method='post';
+                var inputMethod=document.getElementsByName('_method');
+
+                for(var i=0;i<inputMethod.length;i++){
+                    if(inputMethod[i].value==='PUT'){
+                        inputMethod[i].value='POST';
+                        _iMethod=inputMethod[i];
+                    }
+                }
+                document.getElementById('htitle').innerText='Nueva vacuna';
+                document.getElementById('btn').innerText='Guardar'
+            });
+            var vacs=[];
+            $(document).ready(function(){
+                @foreach($vaccinations as $vaccination)
+                    vacs.push({id: '{{$vaccination->idvaccination}}',name:'{{$vaccination->vaccinationname}}'});
+                @endforeach
+            });
+
+            $('#historyVaccination').on('show.bs.modal',function(event){
+                    var buttonV = $(event.relatedTarget);
+                    var idhistory = buttonV.data('idh');
+                    var petname = buttonV.data('petn');
+                    var vaccinations=buttonV.data('vaccinations');
+                    var modal = $(this);
+                    modal.find('.modal-body #idhistory').val(idhistory);
+                    document.getElementById('htitleV').innerText='Historial de vacunas de '+petname;
+                    $('#newVaccination').attr('data-idhv',idhistory);
+                    modal.find('.modal-body #vaccinationTable >tbody').empty();
+                    if(vaccinations.length>0) {
+                        vaccinations.forEach(element => {
+                            var vacuna = element["vaccinationid"];
+                            var name='';
+                            vacs.forEach(ele=>{
+                                if(parseInt(ele.id)===parseInt(vacuna)){
+                                    name=ele.name;
+                                }
+                            });
+                            var dosis = element["dosisnumber"];
+                            var date=element["createdat"];
+                            var row = '<tr class="selected" id="row">' +
+                                '<td><input type="hidden" name="vacuna[]" value="' + name + '">' + name + '</td>' +
+                                '<td><input type="hidden" name="dosis[]" value="' + dosis + '">' + dosis + '</td>' +
+                                '<td><input type="hidden" name="date[]" value="' + date + '">' + date + '</td>' +
+                                '</tr>';
+                            modal.find('.modal-body #vaccinationTable').append(row);
+                        });
+                }else{
+                    modal.find('.modal-body #idhistory').val('');
+                    modal.find('.modal-body #vaccinationTable >tbody').empty();
+                    // modal.find('.modal-body #birthdate').val('');
+                    // modal.find('.modal-body #color').val('');
+                }
+            });
+
+            $('#addVaccination').on('show.bs.modal',function(event){
+                var buttonV = $(event.relatedTarget);
+                console.log(buttonV);
+                var idhistory = buttonV.data('idhv');
+                var modal = $(this);
+                modal.find('.modal-body #idhistory').val(idhistory);
+            });
+// -----------------------------------------HISTORIAL CLINICO (CONSULTAS)-------------------------------------------------------------------------------
+            $('#newConsultation').click(function () {
+                actionV=1;
+                var form= document.getElementById('historyConsultationForm');
+                form.action='{{route('historiesConsultation.addConsultation')}}';
+                form.method='post';
+                var inputMethod=document.getElementsByName('_method');
+
+                for(var i=0;i<inputMethod.length;i++){
+                    if(inputMethod[i].value==='PUT'){
+                        inputMethod[i].value='POST';
+                        _iMethod=inputMethod[i];
+                    }
+                }
+                document.getElementById('htitle').innerText='Nueva consulta';
+                document.getElementById('btn').innerText='Guardar'
+            });
+
+            $('#history').on('show.bs.modal',function(event){
+                var buttonC = $(event.relatedTarget);
+                var idhistory = buttonC.data('idhc');
+                var petname = buttonC.data('petnc');
+                var consultations= buttonC.data('consultations');
+                console.log(consultations);
+                var modal = $(this);
+                modal.find('.modal-body #idhistory').val(idhistory);
+                document.getElementById('htitleC').innerText='Historial de consultas de '+petname;
+                $('#newConsultation').attr('data-idhco',idhistory);
+                modal.find('.modal-body #historyTable >tbody').empty();
+                if(consultations.length>0) {
+                    consultations.forEach(element => {
+                        var diagnosis = element["diagnosis"];
+                        var observation = element["observation"];
+                        var date=element["createdat"];
+                        var row = '<tr class="selected" id="row">' +
+                            '<td><input type="hidden" name="diagnosis[]" value="' + diagnosis + '">' + diagnosis + '</td>' +
+                            '<td><input type="hidden" name="observation[]" value="' + observation + '">' + observation + '</td>' +
+                            '<td><input type="hidden" name="date[]" value="' + date + '">' + date + '</td>' +
+                            '</tr>';
+                        modal.find('.modal-body #historyTable').append(row);
+                    });
+
+                }else{
+                    modal.find('.modal-body #idhistory').val();
+                    modal.find('.modal-body #historyTable >tbody').empty();
+                    // modal.find('.modal-body #birthdate').val('');
+                    // modal.find('.modal-body #color').val('');
+                }
+            });
+
+            $('#addConsultation').on('show.bs.modal',function(event){
+                var buttonC = $(event.relatedTarget);
+                var idhistoryc = buttonC.data('idhco');
+                console.log(idhistoryc);
+                var modal = $(this);
+                modal.find('.modal-body #historyid').val(idhistoryc);
+            });
         </script>
     @endpush
 @endsection

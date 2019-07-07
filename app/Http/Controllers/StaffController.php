@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Staff;
 use App\Person;
+use App\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -17,8 +18,12 @@ class StaffController extends Controller
      */
     public function index()
     {
+        $view=View::where('viewname','=','Empleados')->first();
+        $view->views=$view->views+1;
+        $view->update();
+
         $staffs=Staff::all()->where('status',1);
-        return view('security.staffs.index',compact('staffs'));
+        return view('security.staffs.index',compact('staffs','view'));
     }
 
     /**

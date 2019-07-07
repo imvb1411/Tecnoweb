@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class HistoryVaccination extends Model
 {
     protected $table='clinic_history_vaccinations';
-    protected $primaryKey='idhistoryvaccionation';
+    protected $primaryKey='idhistoryvaccination';
     protected $fillable=[
         'dosisnumber',
         'status'
     ];
+    public $timestamps=false;
 
     public function history(){
         return $this->belongsTo('App\History','historyid','idhistory');

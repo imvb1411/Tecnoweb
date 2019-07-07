@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\Unit;
 use App\Category;
+use App\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -17,10 +18,14 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $view=View::where('viewname','=','Productos')->first();
+        $view->views=$view->views+1;
+        $view->update();
+
         $products=Product::all()->where('status',1);
         $units=Unit::all()->where('status',1);
         $categories=Category::all()->where('status',1);
-        return view('purchases.products.index',compact('products','units','categories'));
+        return view('purchases.products.index',compact('products','units','categories','view'));
     }
 
     /**
@@ -95,6 +100,7 @@ class ProductController extends Controller
         }else{
             Session::put('danger','Ocurrio un error al actualizar el producto '.$product->productname);
         }
+        return redirect()->route('products.index');
     }
 
     /**

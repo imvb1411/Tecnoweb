@@ -2,7 +2,25 @@
 @section('title', 'Empleados')
     @section('header-title','Listado de empleados')
 @section('header-content')
-    <button class="btn btn-primary btn-lg" id="new" data-toggle="modal" data-target="#edit">Nuevo</button>
+    <div class="row">
+        <div class="col-3">
+            <button class="btn btn-primary btn-lg" id="new" data-toggle="modal" data-target="#edit">Nuevo</button>
+        </div>
+        <div class="col-9">
+            <div class="col-md-3 col-sm-6 col-12 float-sm-right">
+                <div class="info-box bg-success">
+                    <span class="info-box-icon"><i class="far fa-flag"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Visitas</span>
+                        <span class="info-box-number">{{$view->views}}</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('content')
     <div class="form-group">

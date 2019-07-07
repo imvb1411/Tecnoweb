@@ -16,4 +16,12 @@ class History extends Model
     public function pet(){
         return $this->belongsTo('App\Pet','petid','idpet');
     }
+
+    public function consultations(){
+        return $this->hasMany('App\Consultation','historyid','idhistory');
+    }
+
+    public function vaccinations(){
+        return $this->hasMany('App\HistoryVaccination','historyid','idhistory');
+    }
 }

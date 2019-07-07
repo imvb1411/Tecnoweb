@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-6">
                         <label for="name">PRECIO</label>
-                        <input type="number" name="price" id="price" class="form-control" placeholder="0.00" required>
+                        <input type="number" name="price" id="price" class="form-control" placeholder="0.00" step="any" required>
                     </div>
                 </div>
                 <br>

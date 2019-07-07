@@ -2,7 +2,25 @@
 @section('title', 'Especies')
     @section('header-title','Listado de especies de animales')
 @section('header-content')
-    <button class="btn btn-primary btn-lg" id="new" data-toggle="modal" data-target="#edit">Nuevo</button>
+    <div class="row">
+        <div class="col-3">
+            <button class="btn btn-primary btn-lg" id="new" data-toggle="modal" data-target="#edit">Nuevo</button>
+        </div>
+        <div class="col-9">
+            <div class="col-md-3 col-sm-6 col-12 float-sm-right">
+                <div class="info-box bg-success">
+                    <span class="info-box-icon"><i class="far fa-flag"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Visitas</span>
+                        <span class="info-box-number">{{$view->views}}</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('content')
         <table id="specieTable" class="table table-bordered table-hover">
@@ -22,7 +40,7 @@
                         <a class="btn btn-info"
                            data-idspecie="{{$specie->idspecie}}"
                            data-speciename="{{$specie->speciename}}"
-                           data-toggle="modal" id="btnedit" data-target="#edit">
+                           data-toggle="modal" id="btnedit" data-target="#edit" onclick="editClic()">
                             Edit
                         </a>
                         {!! Form::open(['route' => ['species.destroy',$specie->idspecie],'method'=>'DELETE','style'=>'display: inline']) !!}
@@ -102,7 +120,7 @@
                     submit.style.display='inline';
                 }
             }
-            var _iMethod='';
+            var _iMethod=null;
             $('#new').click(function () {
                 var form= document.getElementById('specieForm');
                 form.action='{{route('species.store')}}';
@@ -119,16 +137,18 @@
                 document.getElementById('btn').innerText='Guardar'
 
             });
-            $('#btnedit').click(function () {
-                var form= document.getElementById('categoryForm');
+
+            function editClic(){
+                var form= document.getElementById('specieForm');
                 form.action='{{route('species.update',0)}}';
                 form.method='post';
-                if(_iMethod.toString().length>0){
+                if(_iMethod !=null){
                     _iMethod.value='PUT';
                 }
                 document.getElementById('htitle').innerText='Editar especie';
                 document.getElementById('btn').innerText='Editar'
-            });
+            }
+
             $('#edit').on('show.bs.modal',function(event){
                 var button = $(event.relatedTarget);
                 var idspecie = button.data('idspecie');

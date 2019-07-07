@@ -246,7 +246,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{route('purchases.index')}}" class="nav-link">
                                     <i class="fas fa-shopping-cart"></i>
                                     <p>Compras</p>
                                 </a>
@@ -266,12 +266,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <a href="{{route('histories.index')}}" class="nav-link">
                                     <i class="fas fa-briefcase-medical"></i>
                                     <p>Historiales clinicos</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fas fa-briefcase-medical"></i>
-                                    <p>Historiales</p>
                                 </a>
                             </li>
                         </ul>

@@ -22,10 +22,14 @@ Route::resource('users','UserController');
 Route::resource('staffs','StaffController');
 Route::resource('categories','CategoryController');
 Route::resource('products','ProductController');
+Route::resource('purchases','PurchaseController');
 
 Route::resource('histories','HistoryController');
+Route::post('historiesVaccination','HistoryController@addVaccination')->name('historiesVaccination.addVaccination');
+Route::post('historiesConsultation','HistoryController@addConsultation')->name('historiesConsultation.addConsultation');
 Route::resource('vaccinations','VaccinationController');
 
 Auth::routes();
+
 
 Route::get('/home', 'HomeController@index')->name('home');
