@@ -33,6 +33,8 @@ class UserController extends Controller
                     ->from('system_security_users')
                     ->where('status', '=', 1);
             })->get();
+
+
         return view('security.users.index',compact('users','people','view'));
     }
 
@@ -99,6 +101,7 @@ class UserController extends Controller
         $user->nick=$request->nick;
         $user->password=$request->password;
         $user->personid=$request->personid;
+        $user->role=$request->role;
         if($user->update()){
             Session::put('success','Usuario '.$user->nick.' actualizado correctamente');
         }else{
@@ -125,7 +128,14 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function login(){
-
+    public function login(Request $request) {
+        $user=User::where('nick','=',$request->nick)->get();
+        if($user->iduser>0){
+            if($user->password===$request->password){
+                return redirect()->route('/');
+            }
+        }else{
+            return view('layouts.login');
+        }
     }
 }

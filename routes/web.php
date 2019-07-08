@@ -12,13 +12,15 @@
 */
 
 Route::get('/', function () {
-    return view('layouts.master');
+    return view('layouts.login');
 });
 Route::resource('species','SpecieController');
 Route::resource('races','RaceController');
 Route::resource('units','UnitController');
 
 Route::resource('users','UserController');
+Route::post('users','UserController@login')->name('users.login');
+
 Route::resource('staffs','StaffController');
 Route::resource('categories','CategoryController');
 Route::resource('products','ProductController');

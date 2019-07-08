@@ -38,22 +38,22 @@
                 <tr>
                 <td>{{$user->iduser}}</td>
                 <td>{{$user->nick}}</td>
-                <td></td>
+                <td>{{$user->role}}</td>
                 <td>{{$user->person->firstname}} {{$user->person->lastname}}</td>
                 <td >
-                        <a class="btn btn-info"
-                           data-iduser="{{$user->iduser}}"
-                           data-personid="{{$user->personid}}"
-                           data-nick="{{$user->nick}}"
-                           data-password="{{$user->password}}"
-                           data-name="{{$user->person->firstname}} {{$user->person->lastname}}"
-                           data-toggle="modal" id="btnedit" data-target="#edit">
-                            Edit
-                        </a>
-                        {!! Form::open(['route' => ['users.destroy',$user->iduser],'method'=>'DELETE','style'=>'display: inline']) !!}
-                        {{Form::token()}}
-                        <button onclick="return confirm('¿Are you sure?')" type="submit" class="btn btn-danger">Delete</button>
-                        {!! Form::close() !!}
+                    <a class="btn btn-info"
+                       data-iduser="{{$user->iduser}}"
+                       data-personid="{{$user->personid}}"
+                       data-nick="{{$user->nick}}"
+                       data-password="{{$user->password}}"
+                       data-name="{{$user->person->firstname}} {{$user->person->lastname}}"
+                       data-toggle="modal" id="btnedit" data-target="#edit">
+                        Edit
+                    </a>
+                    {!! Form::open(['route' => ['users.destroy',$user->iduser],'method'=>'DELETE','style'=>'display: inline']) !!}
+                    {{Form::token()}}
+                    <button onclick="return confirm('¿Are you sure?')" type="submit" class="btn btn-danger">Delete</button>
+                    {!! Form::close() !!}
                 </td>
             @endforeach
                 </tr>
@@ -79,16 +79,16 @@
                                 <select name="personid" id="personid" class="form-control" required>
                                     @foreach($people as $person)
                                         @if($person->status=1)
-                                        <option value="{{$person->personid}}">{{$person->person->firstname}} {{$person->person->lastname}}</option>
+                                        <option value="{{$person->personid}}">{{$person->firstname}} {{$person->lastname}}</option>
                                         @endif
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-4">
-                                <label for="roleid">ROL</label>
-                                <select name="roleid" id="roleid" class="form-control">
-                                    <option value="1">Administrador</option>
-                                    <option value="2">Asistente</option>
+                                <label for="role">ROL</label>
+                                <select name="role" id="role" class="form-control">
+                                    <option value="ADMINISTRADOR">Administrador</option>
+                                    <option value="ASISTENTE">Asistente</option>
                                 </select>
                             </div>
                             <div class="col-4">
