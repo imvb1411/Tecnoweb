@@ -26,6 +26,9 @@ Route::resource('products','ProductController');
 Route::resource('histories','HistoryController');
 Route::resource('vaccinations','VaccinationController');
 
+Route::resource('vaccination_report','VaccinationReportController');
+Route::resource('product_report','ProductReportController');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

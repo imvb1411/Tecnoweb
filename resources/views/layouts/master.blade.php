@@ -285,9 +285,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="{{route('users.index')}}" class="nav-link active">
-                                    <i class="fas fa-chart-pie"></i>
-                                    <p>Estadisticos</p>
+                                <a href="{{route('vaccination_report.index')}}" class="nav-link active">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <p>Vacunas mas utilizadas</p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{route('product_report.index')}}" class="nav-link active">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <p>Compra de Productos</p>
                                 </a>
                             </li>
                         </ul>
@@ -369,7 +377,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
        sidebar.className='main-sidebar sidebar-dark-secondary elevation-4'
     });
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+{!! $chart->script() !!}
 @stack('scripts')
+
 
 {{--<script src="/plugins/jquery/jquery.min.js"></script>--}}
 {{--<!-- Bootstrap 4 -->--}}
