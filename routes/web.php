@@ -31,6 +31,9 @@ Route::post('historiesVaccination','HistoryController@addVaccination')->name('hi
 Route::post('historiesConsultation','HistoryController@addConsultation')->name('historiesConsultation.addConsultation');
 Route::resource('vaccinations','VaccinationController');
 
+Route::resource('vaccination_report','VaccinationReportController');
+Route::resource('product_report','ProductReportController');
+
 Auth::routes();
 
 
