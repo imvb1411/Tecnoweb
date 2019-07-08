@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Unit;
+use App\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -15,8 +16,12 @@ class UnitController extends Controller
      */
     public function index()
     {
+        $view=View::where('viewname','=','Unidades')->first();
+        $view->views=$view->views+1;
+        $view->update();
+
         $units=Unit::all()->where('status',1);
-        return view('params.units.index',compact('units'));
+        return view('params.units.index',compact('units','view'));
     }
 
     /**

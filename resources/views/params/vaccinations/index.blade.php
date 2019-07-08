@@ -2,7 +2,25 @@
 @section('title', 'Vacunas')
     @section('header-title','Listado de vacunas')
 @section('header-content')
-    <button class="btn btn-primary btn-lg" id="new" data-target="#edit" data-toggle="modal">Nuevo</button>
+    <div class="row">
+        <div class="col-3">
+            <button class="btn btn-primary btn-lg" id="new" data-toggle="modal" data-target="#edit">Nuevo</button>
+        </div>
+        <div class="col-9">
+            <div class="col-md-3 col-sm-6 col-12 float-sm-right">
+                <div class="info-box bg-success">
+                    <span class="info-box-icon"><i class="far fa-flag"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Visitas</span>
+                        <span class="info-box-number">{{$view->views}}</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('content')
         <table id="vaccinationTable" class="table table-bordered table-hover">
@@ -69,12 +87,14 @@
             });
 
             function validate(input){
-                if(input.value.match(/^[a-zA-Z0-9]+$/)){
-                    input.className='form-control is-valid';
-                    flag=true;
-                }else{
-                    flag=false;
-                    input.className='form-control is-invalid';
+                if(input.name==='vaccinationname') {
+                    if (input.value.match(/^[a-zA-Z0-9\s]*$/)) {
+                        input.className = 'form-control is-valid';
+                        flag = true;
+                    } else {
+                        flag = false;
+                        input.className = 'form-control is-invalid';
+                    }
                 }
                 validateSubmit();
             }
@@ -85,8 +105,10 @@
                     submit.style.display='inline';
                 }
             }
+
             var _iMethod=null;
             var action=1;
+
             $('#new').click(function () {
                 action=1;
                 var form= document.getElementById('vaccinationForm');
@@ -102,7 +124,7 @@
                 document.getElementById('htitle').innerText='Nueva vacuna';
                 document.getElementById('btn').innerText='Guardar';
             });
-            
+
             function editClick(){
                 action=2;
                 var form= document.getElementById('vaccinationForm');

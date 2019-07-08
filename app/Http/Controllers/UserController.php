@@ -8,6 +8,7 @@ use App\Staff;
 use App\Unit;
 use App\User;
 use Illuminate\Http\Request;
+use App\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -20,6 +21,10 @@ class UserController extends Controller
      */
     public function index()
     {
+        $view=View::where('viewname','=','Usuarios')->first();
+        $view->views=$view->views+1;
+        $view->update();
+
         $users=User::all()->where('status',1);
         $people = Staff::
             wherenotin('personid',
@@ -28,7 +33,7 @@ class UserController extends Controller
                     ->from('system_security_users')
                     ->where('status', '=', 1);
             })->get();
-        return view('security.users.index',compact('users','people'));
+        return view('security.users.index',compact('users','people','view'));
     }
 
     /**
@@ -118,5 +123,9 @@ class UserController extends Controller
             $user->update();
         }
         return redirect()->route('users.index');
+    }
+
+    public function login(){
+
     }
 }

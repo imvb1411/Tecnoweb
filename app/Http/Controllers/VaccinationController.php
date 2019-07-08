@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Vaccination;
 use App\VaccinationPlan;
+use App\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -17,8 +18,12 @@ class VaccinationController extends Controller
      */
     public function index()
     {
+        $view=View::where('viewname','=','Vacunas')->first();
+        $view->views=$view->views+1;
+        $view->update();
+
         $vaccinations=Vaccination::all()->where('status',1);
-        return view('params.vaccinations.index',compact('vaccinations'));
+        return view('params.vaccinations.index',compact('vaccinations','view'));
     }
 
     /**
@@ -93,9 +98,19 @@ class VaccinationController extends Controller
      * @param  \App\Vaccination  $vaccination
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Vaccination $vaccination)
+    public function update(Request $request)
     {
-        //
+        try{
+            $vaccination=Vaccination::findOrFail($request->idvaccination);
+            $vaccination->vaccinationname=$request->vaccinationname;
+            $vaccination->price=$request->price;
+            $vaccination->update();
+            Session::put('success','La vacuna '.$vaccination->vaccinationname.' fue actualizada correctamente');
+        }catch(\Exception $e){
+            Session::put('danger','Ocurrio un problema al actualizar la vacuna '.$e->getMessage());
+        }
+        return redirect()->route('vaccinations.index');
+
     }
 
     /**

@@ -2,7 +2,25 @@
 @section('title', 'Productos')
     @section('header-title','Listado de Productos')
 @section('header-content')
-    <button class="btn btn-primary btn-lg" id="new" data-toggle="modal" data-target="#edit">Nuevo</button>
+    <div class="row">
+        <div class="col-3">
+            <button class="btn btn-primary btn-lg" id="new" data-toggle="modal" data-target="#edit">Nuevo</button>
+        </div>
+        <div class="col-9">
+            <div class="col-md-3 col-sm-6 col-12 float-sm-right">
+                <div class="info-box bg-success">
+                    <span class="info-box-icon"><i class="far fa-flag"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Visitas</span>
+                        <span class="info-box-number">{{$view->views}}</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('content')
         <table id="productTable" class="table table-bordered table-hover">
@@ -36,7 +54,7 @@
                            data-cost="{{$product->cost}}"
                            data-price="{{$product->price}}"
                            data-categoryid="{{$product->categoryid}}"
-                           data-toggle="modal" id="btnedit" data-target="#edit">
+                           data-toggle="modal" id="btnedit" data-target="#edit" onclick="editClick();">
                             Edit
                         </a>
                         {!! Form::open(['route' => ['products.destroy',$product->idproduct],'method'=>'DELETE','style'=>'display: inline']) !!}
@@ -79,11 +97,11 @@
                         <div class="row">
                             <div class="col-3">
                                 <label for="name">COSTO</label>
-                                <input type="number" name="cost" id="cost" class="form-control" placeholder="0.00" required>
+                                <input type="number" name="cost" id="cost" class="form-control" step="any" placeholder="0.00" required>
                             </div>
                             <div class="col-3">
                                 <label for="name">PRECIO</label>
-                                <input type="number" name="price" id="price" class="form-control" placeholder="0.00" required>
+                                <input type="number" name="price" id="price" class="form-control" step="any" placeholder="0.00" required>
                             </div>
                             <div class="col-6">
                                 <label for="categoryid">CATEGORIA</label>
@@ -113,7 +131,6 @@
             });
             var inputs=document.querySelectorAll('input:not([type="submit"])');
             var selects=document.querySelectorAll('select');
-            console.log(selects);
             var flag=true;
             var submit = document.getElementById('btn');
             for (var i=0;i<inputs.length;i++){
@@ -129,12 +146,14 @@
             });
 
             function validate(input){
-                if(input.value.match(/^[a-zA-Z0-9\s]*$/)){
-                    input.className='form-control is-valid';
-                    flag=true;
-                }else{
-                    flag=false;
-                    input.className='form-control is-invalid';
+                if(input.name==='productname') {
+                    if (input.value.match(/^[a-zA-Z0-9\s]*$/)) {
+                        input.className = 'form-control is-valid';
+                        flag = true;
+                    } else {
+                        flag = false;
+                        input.className = 'form-control is-invalid';
+                    }
                 }
                 validateSubmit();
             }
@@ -145,7 +164,9 @@
                     submit.style.display='inline';
                 }
             }
-            var _iMethod='';
+
+            var _iMethod=null;
+            var action=1;
             $('#new').click(function () {
                 var form= document.getElementById('productForm');
                 form.action='{{route('products.store')}}';
@@ -162,18 +183,22 @@
                 document.getElementById('btn').innerText='Guardar'
 
             });
-            $('#btnedit').click(function () {
-                var form= document.getElementById('categoryForm');
-                form.action='{{route('categories.update',0)}}';
+
+            function editClick(){
+                action=2;
+                var form= document.getElementById('productForm');
+                form.action='{{route('products.update',0)}}';
                 form.method='post';
-                if(_iMethod.toString().length>0){
+                if(_iMethod!=null){
                     _iMethod.value='PUT';
                 }
                 document.getElementById('htitle').innerText='Editar producto';
                 document.getElementById('btn').innerText='Editar'
-            });
+            }
+
             $('#edit').on('show.bs.modal',function(event){
-                if(_iMethod==='PUT' || _iMethod.toString().length===0) {
+                var modal = $(this);
+                if(action===2) {
                     var button = $(event.relatedTarget);
                     var idproduct = button.data('idproduct');
                     var productname = button.data('productname');
@@ -181,13 +206,18 @@
                     var cost = button.data('cost');
                     var price = button.data('price');
                     var categoryid = button.data('categoryid');
-                    var modal = $(this);
+
                     modal.find('.modal-body #idproduct').val(idproduct);
                     modal.find('.modal-body #productname').val(productname);
                     modal.find('.modal-body #unitid').val(unitid);
                     modal.find('.modal-body #cost').val(cost);
                     modal.find('.modal-body #price').val(price);
                     modal.find('.modal-body #categoryid').val(categoryid);
+                }else{
+                    modal.find('.modal-body #idproduct').val('');
+                    modal.find('.modal-body #productname').val('');
+                    modal.find('.modal-body #cost').val('');
+                    modal.find('.modal-body #price').val('');
                 }
             })
         </script>

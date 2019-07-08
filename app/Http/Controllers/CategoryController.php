@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -15,8 +16,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $view=View::where('viewname','=','Categorias')->first();
+        $view->views=$view->views+1;
+        $view->update();
         $categories=Category::all()->where('status',1);
-        return view('params.categories.index',compact('categories'));
+        return view('params.categories.index',compact('categories','view'));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Race;
 use App\Specie;
+use App\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -16,9 +17,13 @@ class RaceController extends Controller
      */
     public function index()
     {
+        $view=View::where('viewname','=','Razas')->first();
+        $view->views=$view->views+1;
+        $view->update();
+
         $races=Race::all()->where('status',1);
         $species=Specie::all()->where('status',1);
-        return view('params.races.index',compact('races','species'));
+        return view('params.races.index',compact('races','species','view'));
     }
 
     /**

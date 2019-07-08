@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Specie;
+use App\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -15,8 +16,12 @@ class SpecieController extends Controller
      */
     public function index()
     {
+        $view=View::where('viewname','=','Especies')->first();
+        $view->views=$view->views+1;
+        $view->update();
+
         $species=Specie::all()->where('status',1);
-        return view('params.species.index',compact('species'));
+        return view('params.species.index',compact('species','view'));
     }
 
     /**
