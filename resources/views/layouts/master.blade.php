@@ -371,10 +371,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
        sidebar.className='main-sidebar sidebar-dark-secondary elevation-4'
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
-{!! $chart->script() !!}
-@stack('scripts')
-
 
 {{--<script src="/plugins/jquery/jquery.min.js"></script>--}}
 {{--<!-- Bootstrap 4 -->--}}
