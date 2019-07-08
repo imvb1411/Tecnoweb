@@ -33,6 +33,7 @@ Route::resource('vaccinations','VaccinationController');
 
 Route::resource('vaccination_report','VaccinationReportController');
 Route::resource('product_report','ProductReportController');
+Route::resource('regularclient_report','RegularClientController');
 
 Auth::routes();
 

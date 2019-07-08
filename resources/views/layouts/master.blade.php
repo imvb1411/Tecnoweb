@@ -283,6 +283,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </a>
                             </li>
                         </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{route('regularclient_report.index')}}" class="nav-link active">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <p>Cliente Frecuente</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </nav>
@@ -361,6 +369,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
        sidebar.className='main-sidebar sidebar-dark-secondary elevation-4'
     });
 </script>
+
 
 {{--<script src="/plugins/jquery/jquery.min.js"></script>--}}
 {{--<!-- Bootstrap 4 -->--}}
